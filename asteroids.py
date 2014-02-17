@@ -1,3 +1,5 @@
+import math
+
 import pyglet
 from pyglet import gl
 from pyglet.window import key
@@ -9,21 +11,28 @@ class Raketa(object):
         gl.glLoadIdentity()
         gl.glPushMatrix()
         gl.glTranslatef(self.x, self.y, 0)
-        gl.glRotatef(self.rotace * 100, 0, 0, 1)
+        gl.glRotatef(self.rotace, 0, 0, 1)
         gl.glBegin(gl.GL_TRIANGLE_FAN)
-        gl.glVertex2f(-20, -20)
-        gl.glVertex2f(0, 20)
-        gl.glVertex2f(20, -20)
+        gl.glVertex2f(-20, 10)
+        gl.glVertex2f(20, 0)
+        gl.glVertex2f(-20, -10)
         gl.glEnd()
         gl.glPopMatrix()
 
     def posun(self, dt):
         self.x += self.rychlost_x * dt
         self.y += self.rychlost_y * dt
+        uhel = self.rotace * math.pi / 180
         if key.LEFT in klavesy:
-            self.rotace += dt
+            self.rotace += dt * 200
         if key.RIGHT in klavesy:
-            self.rotace -= dt
+            self.rotace -= dt * 200
+        if key.UP in klavesy:
+            self.rychlost_x += dt * 100 * math.cos(uhel)
+            self.rychlost_y += dt * 100 * math.sin(uhel)
+        if key.DOWN in klavesy:
+            self.rychlost_x -= dt * 100 * math.cos(uhel)
+            self.rychlost_y -= dt * 100 * math.sin(uhel)
 
 raketa = Raketa()
 raketa.x = 100
@@ -43,11 +52,9 @@ def update(dt):
 klavesy = set()
 
 def stisk_klavesy(klavesa, mod):
-    print 'stisk', klavesa
     klavesy.add(klavesa)
 
 def pusteni_klavesy(klavesa, mod):
-    print 'pusteni', klavesa
     klavesy.discard(klavesa)
 
 window.push_handlers(
