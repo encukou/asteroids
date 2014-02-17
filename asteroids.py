@@ -33,6 +33,14 @@ class Raketa(object):
         if key.DOWN in klavesy:
             self.rychlost_x -= dt * 100 * math.cos(uhel)
             self.rychlost_y -= dt * 100 * math.sin(uhel)
+        if self.x > window.width:
+            self.x -= window.width
+        if self.y > window.height:
+            self.y -= window.height
+        if self.x < 0:
+            self.x += window.width
+        if self.y < 0:
+            self.y += window.height
 
 raketa = Raketa()
 raketa.x = 100
