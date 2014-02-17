@@ -1,0 +1,5 @@
+[en] A simple Asteroids-like game using the Pyglet library.
+This is intended for Czech students of Python; all comments are in Czech.
+
+[cs] Jednoduchá hra typu Asteroids, založená na knihovně Pyglet.
+Viz komentáře v samotném kódu.
