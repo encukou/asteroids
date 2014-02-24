@@ -36,6 +36,13 @@ class Raketa(object):
     ``rotace``.
     """
 
+    def __init__(self, rotace):
+        self.x = window.width / 2
+        self.y = window.height / 2
+        self.rychlost_x = 0
+        self.rychlost_y = 0
+        self.rotace = rotace
+
     def nakresli(self):
         for x in (self.x - window.width,
                   self.x,
@@ -117,12 +124,7 @@ class Raketa(object):
 rakety = []
 for i in range(0, 360, 10):
     # Vytvoření instance (objektu) typu Raketa + nastavení atributů
-    raketa = Raketa()
-    raketa.x = window.width / 2
-    raketa.y = window.height / 2
-    raketa.rychlost_x = 0
-    raketa.rychlost_y = 0
-    raketa.rotace = i
+    raketa = Raketa(i)
     rakety.append(raketa)
 
 def vykresli():
