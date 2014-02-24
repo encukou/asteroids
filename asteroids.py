@@ -30,12 +30,12 @@ VELIKOST_ASTEROIDU = 40  # px, pocatecni
 window = pyglet.window.Window(width=1024, height=768)
 
 class VesmirnyObjekt(object):
-    def __init__(self, rotace):
+    def __init__(self):
         self.x = window.width / 2
         self.y = window.height / 2
         self.rychlost_x = 0
         self.rychlost_y = 0
-        self.rotace = rotace
+        self.rotace = 0
 
     def nakresli(self):
         for x in (self.x - window.width,
@@ -134,13 +134,10 @@ class Asteroid(VesmirnyObjekt):
         gl.glEnd()
 
 
-rakety = []
-for i in range(0, 360, 10):
-    # Vytvoření instance (objektu) typu Raketa + nastavení atributů
-    raketa = Raketa(i)
-    rakety.append(raketa)
+# Vytvoření instance (objektu) typu Raketa + nastavení atributů
+raketa = Raketa()
 
-asteroid = Asteroid(0)
+asteroid = Asteroid()
 
 def vykresli():
     """Vykresli celou scénu"""
@@ -151,15 +148,13 @@ def vykresli():
     # Reset souřadného systému
     gl.glLoadIdentity()
     # Nakreslení samotné rakety
-    for raketa in rakety:
-        raketa.nakresli()
+    raketa.nakresli()
     asteroid.nakresli()
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
     # Jediná věc co potřebuje aktualizovat je naše raketa
-    for raketa in rakety:
-        raketa.posun(dt)
+    raketa.posun(dt)
 
 def stisk_klavesy(klavesa, mod):
     """Zaznamenej stisk klávesy"""
