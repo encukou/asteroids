@@ -20,6 +20,14 @@ from pyglet.window import key
 # stisk_klavesy a pusteni_klavesy)
 klavesy = set()
 
+# Konstanty
+ZRYCHLENI = 500  # px/s^2
+UHLOVA_RYCHLOST = 200  # stupnu/s
+VELIKOST_LODI = 20  # px
+
+# Vytvoření okna
+window = pyglet.window.Window()
+
 class Raketa(object):
     """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
 
@@ -38,9 +46,9 @@ class Raketa(object):
         # Začít kreslit trojúhelník
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
-        gl.glVertex2f(-20, 10)  #  X
-        gl.glVertex2f(20, 0)    #     +  X
-        gl.glVertex2f(-20, -10) #  X
+        gl.glVertex2f(-VELIKOST_LODI, VELIKOST_LODI/2)   #  X
+        gl.glVertex2f(VELIKOST_LODI, 0)                  #     +  X
+        gl.glVertex2f(-VELIKOST_LODI, -VELIKOST_LODI/2)  #  X
         # Konec kreslení trojuhelníka
         gl.glEnd()
         # Vrátit souřadný systém do původního stavu (zapamatovaného
@@ -54,9 +62,9 @@ class Raketa(object):
         self.y += self.rychlost_y * dt
         # C
         if key.LEFT in klavesy:
-            self.rotace += dt * 200
+            self.rotace += dt * UHLOVA_RYCHLOST
         if key.RIGHT in klavesy:
-            self.rotace -= dt * 200
+            self.rotace -= dt * UHLOVA_RYCHLOST
         # Spocitat uhel otoceni rakety v radianech (``rotace`` je ve stupnich)
         uhel = self.rotace * math.pi / 180
         # Šipky nahoru/dolů mění rychlost ve směru natočení rakety.
@@ -77,11 +85,11 @@ class Raketa(object):
         #         |
         #
         if key.UP in klavesy:
-            self.rychlost_x += dt * 100 * math.cos(uhel)
-            self.rychlost_y += dt * 100 * math.sin(uhel)
+            self.rychlost_x += dt * ZRYCHLENI * math.cos(uhel)
+            self.rychlost_y += dt * ZRYCHLENI * math.sin(uhel)
         if key.DOWN in klavesy:
-            self.rychlost_x -= dt * 100 * math.cos(uhel)
-            self.rychlost_y -= dt * 100 * math.sin(uhel)
+            self.rychlost_x -= dt * ZRYCHLENI * math.cos(uhel)
+            self.rychlost_y -= dt * ZRYCHLENI * math.sin(uhel)
         # Pokud vesmírná loď vyletí z obrazovky, přesuneme ji na druhý okraj.
         # Dosáhneme tím nekonečného vesmíru!
         if self.x > window.width:
@@ -95,8 +103,8 @@ class Raketa(object):
 
 # Vytvoření instance (objektu) typu Raketa + nastavení atributů
 raketa = Raketa()
-raketa.x = 100
-raketa.y = 100
+raketa.x = window.width / 2
+raketa.y = window.height / 2
 raketa.rychlost_x = 0
 raketa.rychlost_y = 0
 raketa.rotace = 0
@@ -124,9 +132,6 @@ def stisk_klavesy(klavesa, mod):
 def pusteni_klavesy(klavesa, mod):
     """Zaznamenej puštění klávesy"""
     klavesy.discard(klavesa)
-
-# Vytvoření okna
-window = pyglet.window.Window()
 
 # Nastavení funkcí, které se zavolají pro různé události okna:
 window.push_handlers(
