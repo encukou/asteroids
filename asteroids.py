@@ -36,6 +36,7 @@ class VesmirnyObjekt(object):
         self.rychlost_x = 0
         self.rychlost_y = 0
         self.rotace = 0
+        self.uhlova_rychlost = 0
 
     def nakresli(self):
         for x in (self.x - window.width,
@@ -59,12 +60,46 @@ class VesmirnyObjekt(object):
         # pomocí glPushMatrix)
         gl.glPopMatrix()
 
+    def pohyb(self, dt):
+        self.x += self.rychlost_x * dt
+        self.y += self.rychlost_y * dt
+        self.rotace += self.uhlova_rychlost
+        # Pokud vesmírná loď vyletí z obrazovky, přesuneme ji na druhý okraj.
+        # Dosáhneme tím nekonečného vesmíru!
+        if self.x > window.width:
+            self.x -= window.width
+        if self.y > window.height:
+            self.y -= window.height
+        if self.x < 0:
+            self.x += window.width
+        if self.y < 0:
+            self.y += window.height
+
+    def posun(self, dt):
+        self.pohyb(dt)
+
+
+class Raketa(VesmirnyObjekt):
+    """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
+
+    Poloha (v pixelech) je uložena v atributech ``x`` a ``y``, rychlost
+    v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
+    ``rotace``.
+    """
+    def nakresli_tvar(self):
+        # Začít kreslit trojúhelník
+        gl.glBegin(gl.GL_TRIANGLE_FAN)
+        # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
+        gl.glVertex2f(-VELIKOST_LODI, VELIKOST_LODI/2)   #  X
+        gl.glVertex2f(VELIKOST_LODI, 0)                  #     +  X
+        gl.glVertex2f(-VELIKOST_LODI, -VELIKOST_LODI/2)  #  X
+        # Konec kreslení trojuhelníka
+        gl.glEnd()
+
     def posun(self, dt):
         """Aktualizuj stav rakety po ``dt`` uplynulých sekundách"""
         # Změna polohy = rychlost krát čas
-        self.x += self.rychlost_x * dt
-        self.y += self.rychlost_y * dt
-        # C
+        self.pohyb(dt)
         if key.LEFT in klavesy:
             self.rotace += dt * UHLOVA_RYCHLOST
         if key.RIGHT in klavesy:
@@ -94,37 +129,13 @@ class VesmirnyObjekt(object):
         if key.DOWN in klavesy:
             self.rychlost_x -= dt * ZRYCHLENI * math.cos(uhel)
             self.rychlost_y -= dt * ZRYCHLENI * math.sin(uhel)
-        # Pokud vesmírná loď vyletí z obrazovky, přesuneme ji na druhý okraj.
-        # Dosáhneme tím nekonečného vesmíru!
-        if self.x > window.width:
-            self.x -= window.width
-        if self.y > window.height:
-            self.y -= window.height
-        if self.x < 0:
-            self.x += window.width
-        if self.y < 0:
-            self.y += window.height
-
-
-class Raketa(VesmirnyObjekt):
-    """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
-
-    Poloha (v pixelech) je uložena v atributech ``x`` a ``y``, rychlost
-    v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
-    ``rotace``.
-    """
-    def nakresli_tvar(self):
-        # Začít kreslit trojúhelník
-        gl.glBegin(gl.GL_TRIANGLE_FAN)
-        # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
-        gl.glVertex2f(-VELIKOST_LODI, VELIKOST_LODI/2)   #  X
-        gl.glVertex2f(VELIKOST_LODI, 0)                  #     +  X
-        gl.glVertex2f(-VELIKOST_LODI, -VELIKOST_LODI/2)  #  X
-        # Konec kreslení trojuhelníka
-        gl.glEnd()
 
 
 class Asteroid(VesmirnyObjekt):
+    def __init__(self):
+        VesmirnyObjekt.__init__(self)
+        self.uhlova_rychlost = 1
+
     def nakresli_tvar(self):
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         gl.glVertex2f(-VELIKOST_ASTEROIDU/2, -VELIKOST_ASTEROIDU/2)
@@ -155,6 +166,7 @@ def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
     # Jediná věc co potřebuje aktualizovat je naše raketa
     raketa.posun(dt)
+    asteroid.posun(dt)
 
 def stisk_klavesy(klavesa, mod):
     """Zaznamenej stisk klávesy"""
