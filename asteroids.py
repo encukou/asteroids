@@ -24,18 +24,12 @@ klavesy = set()
 ZRYCHLENI = 500  # px/s^2
 UHLOVA_RYCHLOST = 200  # stupnu/s
 VELIKOST_LODI = 20  # px
+VELIKOST_ASTEROIDU = 40  # px, pocatecni
 
 # Vytvoření okna
 window = pyglet.window.Window(width=1024, height=768)
 
-class Raketa(object):
-    """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
-
-    Poloha (v pixelech) je uložena v atributech ``x`` a ``y``, rychlost
-    v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
-    ``rotace``.
-    """
-
+class VesmirnyObjekt(object):
     def __init__(self, rotace):
         self.x = window.width / 2
         self.y = window.height / 2
@@ -64,16 +58,6 @@ class Raketa(object):
         # Vrátit souřadný systém do původního stavu (zapamatovaného
         # pomocí glPushMatrix)
         gl.glPopMatrix()
-
-    def nakresli_tvar(self):
-        # Začít kreslit trojúhelník
-        gl.glBegin(gl.GL_TRIANGLE_FAN)
-        # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
-        gl.glVertex2f(-VELIKOST_LODI, VELIKOST_LODI/2)   #  X
-        gl.glVertex2f(VELIKOST_LODI, 0)                  #     +  X
-        gl.glVertex2f(-VELIKOST_LODI, -VELIKOST_LODI/2)  #  X
-        # Konec kreslení trojuhelníka
-        gl.glEnd()
 
     def posun(self, dt):
         """Aktualizuj stav rakety po ``dt`` uplynulých sekundách"""
@@ -121,11 +105,42 @@ class Raketa(object):
         if self.y < 0:
             self.y += window.height
 
+
+class Raketa(VesmirnyObjekt):
+    """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
+
+    Poloha (v pixelech) je uložena v atributech ``x`` a ``y``, rychlost
+    v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
+    ``rotace``.
+    """
+    def nakresli_tvar(self):
+        # Začít kreslit trojúhelník
+        gl.glBegin(gl.GL_TRIANGLE_FAN)
+        # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
+        gl.glVertex2f(-VELIKOST_LODI, VELIKOST_LODI/2)   #  X
+        gl.glVertex2f(VELIKOST_LODI, 0)                  #     +  X
+        gl.glVertex2f(-VELIKOST_LODI, -VELIKOST_LODI/2)  #  X
+        # Konec kreslení trojuhelníka
+        gl.glEnd()
+
+
+class Asteroid(VesmirnyObjekt):
+    def nakresli_tvar(self):
+        gl.glBegin(gl.GL_TRIANGLE_FAN)
+        gl.glVertex2f(-VELIKOST_ASTEROIDU/2, -VELIKOST_ASTEROIDU/2)
+        gl.glVertex2f(-VELIKOST_ASTEROIDU/2, VELIKOST_ASTEROIDU/2)
+        gl.glVertex2f(VELIKOST_ASTEROIDU/2, VELIKOST_ASTEROIDU/2)
+        gl.glVertex2f(VELIKOST_ASTEROIDU/2, -VELIKOST_ASTEROIDU/2)
+        gl.glEnd()
+
+
 rakety = []
 for i in range(0, 360, 10):
     # Vytvoření instance (objektu) typu Raketa + nastavení atributů
     raketa = Raketa(i)
     rakety.append(raketa)
+
+asteroid = Asteroid(0)
 
 def vykresli():
     """Vykresli celou scénu"""
@@ -138,6 +153,7 @@ def vykresli():
     # Nakreslení samotné rakety
     for raketa in rakety:
         raketa.nakresli()
+    asteroid.nakresli()
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
