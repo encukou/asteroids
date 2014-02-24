@@ -53,6 +53,12 @@ class Raketa(object):
         gl.glTranslatef(x, y, 0)
         # Otočit systém souřadnic o příslušný úhel
         gl.glRotatef(self.rotace, 0, 0, 1)
+        self.nakresli_tvar()
+        # Vrátit souřadný systém do původního stavu (zapamatovaného
+        # pomocí glPushMatrix)
+        gl.glPopMatrix()
+
+    def nakresli_tvar(self):
         # Začít kreslit trojúhelník
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
@@ -61,9 +67,6 @@ class Raketa(object):
         gl.glVertex2f(-VELIKOST_LODI, -VELIKOST_LODI/2)  #  X
         # Konec kreslení trojuhelníka
         gl.glEnd()
-        # Vrátit souřadný systém do původního stavu (zapamatovaného
-        # pomocí glPushMatrix)
-        gl.glPopMatrix()
 
     def posun(self, dt):
         """Aktualizuj stav rakety po ``dt`` uplynulých sekundách"""
