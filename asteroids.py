@@ -23,7 +23,7 @@ klavesy = set()
 # Konstanty
 ZRYCHLENI = 500  # px/s^2
 UHLOVA_RYCHLOST = 200  # stupnu/s
-VELIKOST_LODI = 20  # px
+VELIKOST_LODI = 200  # px
 
 # Vytvoření okna
 window = pyglet.window.Window()
@@ -35,12 +35,16 @@ class Raketa(object):
     v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
     ``rotace``.
     """
+
     def nakresli(self):
+        self.nakresli_jednou(self.x, self.y)
+
+    def nakresli_jednou(self, x, y):
         """Vykresli raketu (trojúhelníček na správne pozici)"""
         # Zapamatovat si stav souřadného systému
         gl.glPushMatrix()
         # Posunout počátek souřadnic na pozici rakety
-        gl.glTranslatef(self.x, self.y, 0)
+        gl.glTranslatef(x, y, 0)
         # Otočit systém souřadnic o příslušný úhel
         gl.glRotatef(self.rotace, 0, 0, 1)
         # Začít kreslit trojúhelník
