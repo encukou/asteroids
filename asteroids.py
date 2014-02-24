@@ -23,7 +23,7 @@ klavesy = set()
 # Konstanty
 ZRYCHLENI = 500  # px/s^2
 UHLOVA_RYCHLOST = 200  # stupnu/s
-VELIKOST_LODI = 200  # px
+VELIKOST_LODI = 20  # px
 
 # Vytvoření okna
 window = pyglet.window.Window()
@@ -37,7 +37,13 @@ class Raketa(object):
     """
 
     def nakresli(self):
-        self.nakresli_jednou(self.x, self.y)
+        for x in (self.x - window.width,
+                  self.x,
+                  self.x + window.width):
+            for y in (self.y - window.height,
+                      self.y,
+                      self.y + window.height):
+                self.nakresli_jednou(x, y)
 
     def nakresli_jednou(self, x, y):
         """Vykresli raketu (trojúhelníček na správne pozici)"""
