@@ -26,7 +26,7 @@ UHLOVA_RYCHLOST = 200  # stupnu/s
 VELIKOST_LODI = 20  # px
 
 # Vytvoření okna
-window = pyglet.window.Window()
+window = pyglet.window.Window(width=1024, height=768)
 
 class Raketa(object):
     """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
@@ -114,13 +114,16 @@ class Raketa(object):
         if self.y < 0:
             self.y += window.height
 
-# Vytvoření instance (objektu) typu Raketa + nastavení atributů
-raketa = Raketa()
-raketa.x = window.width / 2
-raketa.y = window.height / 2
-raketa.rychlost_x = 0
-raketa.rychlost_y = 0
-raketa.rotace = 0
+rakety = []
+for i in range(0, 360, 10):
+    # Vytvoření instance (objektu) typu Raketa + nastavení atributů
+    raketa = Raketa()
+    raketa.x = window.width / 2
+    raketa.y = window.height / 2
+    raketa.rychlost_x = 0
+    raketa.rychlost_y = 0
+    raketa.rotace = i
+    rakety.append(raketa)
 
 def vykresli():
     """Vykresli celou scénu"""
@@ -131,12 +134,14 @@ def vykresli():
     # Reset souřadného systému
     gl.glLoadIdentity()
     # Nakreslení samotné rakety
-    raketa.nakresli()
+    for raketa in rakety:
+        raketa.nakresli()
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
     # Jediná věc co potřebuje aktualizovat je naše raketa
-    raketa.posun(dt)
+    for raketa in rakety:
+        raketa.posun(dt)
 
 def stisk_klavesy(klavesa, mod):
     """Zaznamenej stisk klávesy"""
