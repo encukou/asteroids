@@ -194,6 +194,11 @@ class Torpedo(VesmirnyObjekt):
         gl.glVertex2f(VELIKOST_TORPEDA, -VELIKOST_TORPEDA/2)
         gl.glEnd()
 
+    def posun(self, dt):
+        self.pohyb(dt)
+        if self.delka_drahy > (window.width + window.height) / 2:
+            objekty.remove(self)
+
 
 # Vytvoření instance (objektu) typu Raketa + nastavení atributů
 raketa = Raketa()
