@@ -11,6 +11,7 @@ Dopredu/Dozadu: Zrychlovat/Zpomalovat
 """
 
 import math
+import random
 
 import pyglet
 from pyglet import gl
@@ -25,6 +26,7 @@ ZRYCHLENI = 500  # px/s^2
 UHLOVA_RYCHLOST = 200  # stupnu/s
 VELIKOST_LODI = 20  # px
 VELIKOST_ASTEROIDU = 40  # px, pocatecni
+RYCHLOST_ASTEROIDU = 100  # max, px/s
 
 # Vytvoření okna
 window = pyglet.window.Window(width=1024, height=768)
@@ -148,6 +150,8 @@ class Asteroid(VesmirnyObjekt):
 raketa = Raketa()
 
 asteroid = Asteroid()
+asteroid.rychlost_x = random.uniform(-RYCHLOST_ASTEROIDU, RYCHLOST_ASTEROIDU)
+asteroid.rychlost_y = random.uniform(-RYCHLOST_ASTEROIDU, RYCHLOST_ASTEROIDU)
 
 def vykresli():
     """Vykresli celou scénu"""
