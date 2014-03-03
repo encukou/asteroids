@@ -24,6 +24,7 @@ klavesy = set()
 # Konstanty
 ZRYCHLENI = 500  # px/s^2
 UHLOVA_RYCHLOST = 200  # stupnu/s
+UHLOVA_RYCHLOST_ASTEROIDU = 200  # max, stupnu/s
 VELIKOST_LODI = 20  # px
 VELIKOST_ASTEROIDU = 40  # px, pocatecni
 RYCHLOST_ASTEROIDU = 100  # max, px/s
@@ -69,7 +70,7 @@ class VesmirnyObjekt(object):
     def pohyb(self, dt):
         self.x += self.rychlost_x * dt
         self.y += self.rychlost_y * dt
-        self.rotace += self.uhlova_rychlost
+        self.rotace += self.uhlova_rychlost * dt
         # Pokud vesmírná loď vyletí z obrazovky, přesuneme ji na druhý okraj.
         # Dosáhneme tím nekonečného vesmíru!
         if self.x > window.width:
@@ -146,6 +147,9 @@ class Asteroid(VesmirnyObjekt):
         else:
             self.x = random.uniform(0, window.width)
             self.y = 0
+        self.uhlova_rychlost = random.uniform(
+            -UHLOVA_RYCHLOST_ASTEROIDU,
+            UHLOVA_RYCHLOST_ASTEROIDU)
 
     def nakresli_tvar(self):
         """Nakreslí obdélníček"""
