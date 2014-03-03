@@ -160,7 +160,10 @@ class Asteroid(VesmirnyObjekt):
 # Vytvoření instance (objektu) typu Raketa + nastavení atributů
 raketa = Raketa()
 
-asteroid = Asteroid()
+objekty = [raketa]
+
+for i in range(3):
+    objekty.append(Asteroid())
 
 def vykresli():
     """Vykresli celou scénu"""
@@ -170,15 +173,15 @@ def vykresli():
     gl.glColor3f(1, 1, 1)
     # Reset souřadného systému
     gl.glLoadIdentity()
-    # Nakreslení samotné rakety
-    raketa.nakresli()
-    asteroid.nakresli()
+    # Nakreslení samotných objektů
+    for objekt in objekty:
+        objekt.nakresli()
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
-    # Jediná věc co potřebuje aktualizovat je naše raketa
-    raketa.posun(dt)
-    asteroid.posun(dt)
+    # Aktualizuj všechny objekty
+    for objekt in objekty:
+        objekt.posun(dt)
 
 def stisk_klavesy(klavesa, mod):
     """Zaznamenej stisk klávesy"""
