@@ -29,7 +29,8 @@ VELIKOST_ASTEROIDU = 40  # px, pocatecni
 RYCHLOST_ASTEROIDU = 100  # max, px/s
 
 # Vytvoření okna
-window = pyglet.window.Window(width=1024, height=768)
+#window = pyglet.window.Window(width=1024, height=768)
+window = pyglet.window.Window(width=800, height=600)
 
 class VesmirnyObjekt(object):
     """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
@@ -135,6 +136,10 @@ class Asteroid(VesmirnyObjekt):
     def __init__(self):
         VesmirnyObjekt.__init__(self)
         self.uhlova_rychlost = 1
+        self.rychlost_x = random.uniform(-RYCHLOST_ASTEROIDU,
+                                         RYCHLOST_ASTEROIDU)
+        self.rychlost_y = random.uniform(-RYCHLOST_ASTEROIDU,
+                                         RYCHLOST_ASTEROIDU)
 
     def nakresli_tvar(self):
         """Nakreslí obdélníček"""
@@ -150,8 +155,6 @@ class Asteroid(VesmirnyObjekt):
 raketa = Raketa()
 
 asteroid = Asteroid()
-asteroid.rychlost_x = random.uniform(-RYCHLOST_ASTEROIDU, RYCHLOST_ASTEROIDU)
-asteroid.rychlost_y = random.uniform(-RYCHLOST_ASTEROIDU, RYCHLOST_ASTEROIDU)
 
 def vykresli():
     """Vykresli celou scénu"""
