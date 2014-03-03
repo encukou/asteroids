@@ -51,6 +51,7 @@ class VesmirnyObjekt(object):
         self.rychlost_y = 0
         self.rotace = 0
         self.uhlova_rychlost = 0
+        self.delka_drahy = 0
 
     def nakresli(self):
         """Vykresli objekt 9x, aby fungoval přechod přes hranu obrazovky"""
@@ -74,6 +75,10 @@ class VesmirnyObjekt(object):
     def pohyb(self, dt):
         self.x += self.rychlost_x * dt
         self.y += self.rychlost_y * dt
+        self.delka_drahy += math.sqrt(
+            (self.rychlost_x * dt) ** 2 +
+            (self.rychlost_y * dt) ** 2
+        )
         self.rotace += self.uhlova_rychlost * dt
         # Pokud vesmírná loď vyletí z obrazovky, přesuneme ji na druhý okraj.
         # Dosáhneme tím nekonečného vesmíru!
