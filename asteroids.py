@@ -30,6 +30,7 @@ VELIKOST_ASTEROIDU = 40  # px, pocatecni
 SISATOST = 5 # px
 RYCHLOST_ASTEROIDU = 100  # max, px/s
 POCET_VYSECI_ASTEROIDU = 13
+VELIKOST_TORPEDA = 3
 
 # Vytvoření okna
 #window = pyglet.window.Window(width=1024, height=768)
@@ -169,6 +170,16 @@ class Asteroid(VesmirnyObjekt):
         gl.glEnd()
 
 
+class Torpedo(VesmirnyObjekt):
+    def nakresli_tvar(self):
+        gl.glBegin(gl.GL_TRIANGLE_FAN)
+        gl.glVertex2f(-VELIKOST_TORPEDA, -VELIKOST_TORPEDA/2)
+        gl.glVertex2f(-VELIKOST_TORPEDA, VELIKOST_TORPEDA/2)
+        gl.glVertex2f(VELIKOST_TORPEDA, VELIKOST_TORPEDA/2)
+        gl.glVertex2f(VELIKOST_TORPEDA, -VELIKOST_TORPEDA/2)
+        gl.glEnd()
+
+
 # Vytvoření instance (objektu) typu Raketa + nastavení atributů
 raketa = Raketa()
 
@@ -176,6 +187,8 @@ objekty = [raketa]
 
 for i in range(3):
     objekty.append(Asteroid())
+
+objekty.append(Torpedo())
 
 def vykresli():
     """Vykresli celou scénu"""
