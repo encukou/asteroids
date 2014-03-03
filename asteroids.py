@@ -30,6 +30,12 @@ VELIKOST_ASTEROIDU = 40  # px, pocatecni
 window = pyglet.window.Window(width=1024, height=768)
 
 class VesmirnyObjekt(object):
+    """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
+
+    Poloha (v pixelech) je uložena v atributech ``x`` a ``y``, rychlost
+    v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
+    ``rotace``.
+    """
     def __init__(self):
         self.x = window.width / 2
         self.y = window.height / 2
@@ -39,16 +45,13 @@ class VesmirnyObjekt(object):
         self.uhlova_rychlost = 0
 
     def nakresli(self):
-        for x in (self.x - window.width,
-                  self.x,
-                  self.x + window.width):
-            for y in (self.y - window.height,
-                      self.y,
-                      self.y + window.height):
+        """Vykresli objekt 9x, aby fungoval přechod přes hranu obrazovky"""
+        for x in (self.x - window.width, self.x, self.x + window.width):
+            for y in (self.y - window.height, self.y, self.y + window.height):
                 self.nakresli_jednou(x, y)
 
     def nakresli_jednou(self, x, y):
-        """Vykresli raketu (trojúhelníček na správne pozici)"""
+        """Vykresli objekt na dané pozici"""
         # Zapamatovat si stav souřadného systému
         gl.glPushMatrix()
         # Posunout počátek souřadnic na pozici rakety
@@ -80,13 +83,8 @@ class VesmirnyObjekt(object):
 
 
 class Raketa(VesmirnyObjekt):
-    """Trojúhelníkovtý objekt s polohou, rychlostí, a natočením
-
-    Poloha (v pixelech) je uložena v atributech ``x`` a ``y``, rychlost
-    v ``rychlost_x`` a ``rychlost_y``, a natočení (ve stupních) v atributu
-    ``rotace``.
-    """
     def nakresli_tvar(self):
+        """Nakreslí trojúhelník"""
         # Začít kreslit trojúhelník
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
@@ -137,6 +135,7 @@ class Asteroid(VesmirnyObjekt):
         self.uhlova_rychlost = 1
 
     def nakresli_tvar(self):
+        """Nakreslí obdélníček"""
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         gl.glVertex2f(-VELIKOST_ASTEROIDU/2, -VELIKOST_ASTEROIDU/2)
         gl.glVertex2f(-VELIKOST_ASTEROIDU/2, VELIKOST_ASTEROIDU/2)
