@@ -27,7 +27,9 @@ UHLOVA_RYCHLOST = 200  # stupnu/s
 UHLOVA_RYCHLOST_ASTEROIDU = 200  # max, stupnu/s
 VELIKOST_LODI = 20  # px
 VELIKOST_ASTEROIDU = 40  # px, pocatecni
+SISATOST = 5 # px
 RYCHLOST_ASTEROIDU = 100  # max, px/s
+POCET_VYSECI_ASTEROIDU = 13
 
 # Vytvoření okna
 #window = pyglet.window.Window(width=1024, height=768)
@@ -150,14 +152,20 @@ class Asteroid(VesmirnyObjekt):
         self.uhlova_rychlost = random.uniform(
             -UHLOVA_RYCHLOST_ASTEROIDU,
             UHLOVA_RYCHLOST_ASTEROIDU)
+        self.tvar = []
+        for i in range(POCET_VYSECI_ASTEROIDU):
+            self.tvar.append(random.uniform(-1, 1))
 
     def nakresli_tvar(self):
-        """Nakreslí obdélníček"""
+        """Nakreslí asteroid"""
         gl.glBegin(gl.GL_TRIANGLE_FAN)
-        gl.glVertex2f(-VELIKOST_ASTEROIDU/2, -VELIKOST_ASTEROIDU/2)
-        gl.glVertex2f(-VELIKOST_ASTEROIDU/2, VELIKOST_ASTEROIDU/2)
-        gl.glVertex2f(VELIKOST_ASTEROIDU/2, VELIKOST_ASTEROIDU/2)
-        gl.glVertex2f(VELIKOST_ASTEROIDU/2, -VELIKOST_ASTEROIDU/2)
+        gl.glVertex2f(0, 0)
+        for i, s in enumerate(self.tvar + self.tvar[:1]):
+            delka = VELIKOST_ASTEROIDU + s * SISATOST
+            uhel = i * math.pi * 2 / POCET_VYSECI_ASTEROIDU
+            gl.glVertex2f(
+                math.cos(uhel) * delka,
+                math.sin(uhel) * delka)
         gl.glEnd()
 
 
