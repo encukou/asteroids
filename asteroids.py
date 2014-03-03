@@ -171,6 +171,12 @@ class Asteroid(VesmirnyObjekt):
 
 
 class Torpedo(VesmirnyObjekt):
+    def __init__(self, raketa):
+        VesmirnyObjekt.__init__(self)
+        self.x = raketa.x
+        self.y = raketa.y
+        self.rotace = raketa.rotace
+
     def nakresli_tvar(self):
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         gl.glVertex2f(-VELIKOST_TORPEDA, -VELIKOST_TORPEDA/2)
@@ -187,8 +193,6 @@ objekty = [raketa]
 
 for i in range(3):
     objekty.append(Asteroid())
-
-objekty.append(Torpedo())
 
 def vykresli():
     """Vykresli celou scénu"""
@@ -208,9 +212,14 @@ def update(dt):
     for objekt in objekty:
         objekt.posun(dt)
 
+def vystrel():
+    objekty.append(Torpedo(raketa))
+
 def stisk_klavesy(klavesa, mod):
     """Zaznamenej stisk klávesy"""
     klavesy.add(klavesa)
+    if klavesa == key.SPACE:
+        vystrel()
 
 def pusteni_klavesy(klavesa, mod):
     """Zaznamenej puštění klávesy"""
