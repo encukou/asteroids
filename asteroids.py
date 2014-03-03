@@ -31,6 +31,7 @@ SISATOST = 5 # px
 RYCHLOST_ASTEROIDU = 100  # max, px/s
 POCET_VYSECI_ASTEROIDU = 13
 VELIKOST_TORPEDA = 3
+RYCHLOST_TORPEDA = 500
 
 # Vytvoření okna
 #window = pyglet.window.Window(width=1024, height=768)
@@ -173,8 +174,11 @@ class Asteroid(VesmirnyObjekt):
 class Torpedo(VesmirnyObjekt):
     def __init__(self, raketa):
         VesmirnyObjekt.__init__(self)
-        self.x = raketa.x
-        self.y = raketa.y
+        uhel = raketa.rotace * math.pi / 180
+        self.x = raketa.x + VELIKOST_LODI * math.cos(uhel)
+        self.y = raketa.y + VELIKOST_LODI * math.sin(uhel)
+        self.rychlost_x = raketa.rychlost_x + RYCHLOST_TORPEDA * math.cos(uhel)
+        self.rychlost_y = raketa.rychlost_y + RYCHLOST_TORPEDA * math.sin(uhel)
         self.rotace = raketa.rotace
 
     def nakresli_tvar(self):
