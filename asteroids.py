@@ -140,6 +140,12 @@ class Asteroid(VesmirnyObjekt):
                                          RYCHLOST_ASTEROIDU)
         self.rychlost_y = random.uniform(-RYCHLOST_ASTEROIDU,
                                          RYCHLOST_ASTEROIDU)
+        if random.choice([True, False]):
+            self.x = 0
+            self.y = random.uniform(0, window.height)
+        else:
+            self.x = random.uniform(0, window.width)
+            self.y = 0
 
     def nakresli_tvar(self):
         """Nakreslí obdélníček"""
