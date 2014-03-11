@@ -259,7 +259,10 @@ class Torpedo(VesmirnyObjekt):
                     (self.x - objekt.x) ** 2 +
                     (self.y - objekt.y) ** 2)
                 if vzdalenost_na_druhou < VELIKOST_ASTEROIDU ** 2:
-                    objekty.remove(objekt)
+                    objekty.append(Asteroid())
+                    if self in objekty:
+                        objekty.remove(self)
+                    break
 
 
 # Vytvoření instance (objektu) typu Raketa + nastavení atributů
