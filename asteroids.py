@@ -36,7 +36,7 @@ RYCHLOST_TORPEDA = 500  # px/s
 POCET_ASTEROIDU = 3
 
 # Vytvoření okna
-window = pyglet.window.Window(width=1024, height=768)
+window = pyglet.window.Window(width=800, height=600)
 
 class VesmirnyObjekt(object):
     """Objekt s polohou, rychlostí, a natočením
