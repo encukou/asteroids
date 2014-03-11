@@ -56,6 +56,7 @@ class VesmirnyObjekt(object):
         self.rotace = 0
         self.uhlova_rychlost = 0
         self.delka_drahy = 0
+        self.jsem_asteroid = False
 
     def nakresli(self):
         """Vykresli objekt 9x, aby fungoval přechod přes hranu obrazovky"""
@@ -196,6 +197,7 @@ class Asteroid(VesmirnyObjekt):
                 random.uniform(-1, 1),
                 (r, g, b),
             ))
+        self.jsem_asteroid = True
 
     def nakresli_tvar(self):
         """Nakreslí asteroid jako n-úhelník se středem v (0, 0)"""
@@ -250,6 +252,14 @@ class Torpedo(VesmirnyObjekt):
         # Pokud torpédo doletělo dostatečně daleko, odstraní se
         if self.delka_drahy > (window.width + window.height) / 2:
             objekty.remove(self)
+        # Střety s asteroidy
+        for objekt in objekty:
+            if objekt.jsem_asteroid:
+                vzdalenost_na_druhou = (
+                    (self.x - objekt.x) ** 2 +
+                    (self.y - objekt.y) ** 2)
+                if vzdalenost_na_druhou < VELIKOST_ASTEROIDU ** 2:
+                    objekty.remove(objekt)
 
 
 # Vytvoření instance (objektu) typu Raketa + nastavení atributů
