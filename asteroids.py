@@ -186,9 +186,16 @@ class Asteroid(VesmirnyObjekt):
             UHLOVA_RYCHLOST_ASTEROIDU)
         # Asteroidu bude mít náhodnýmé odchylky od pravidelného n-úhelníku
         # (které se nebudou v průběhu "života" asteroidu měnit)
-        self.tvar = []
+        # Stejně tak bude mít každý bod na obvodu svoji barvu.
+        self.vlastnosti = []
         for i in range(POCET_VYSECI_ASTEROIDU):
-            self.tvar.append(random.uniform(-1, 1))
+            b = random.uniform(0.7, 1)
+            g = b * random.uniform(0.7, 1)
+            r = g * random.uniform(0.7, 1)
+            self.vlastnosti.append((
+                random.uniform(-1, 1),
+                (r, g, b),
+            ))
 
     def nakresli_tvar(self):
         """Nakreslí asteroid jako n-úhelník se středem v (0, 0)"""
@@ -197,14 +204,14 @@ class Asteroid(VesmirnyObjekt):
         # Bod společný všem vykresleným trojúhelníkům
         gl.glVertex2f(0, 0)
         # Jednotlivé body na obvodu
-        for i, s in enumerate(self.tvar + self.tvar[:1]):
+        for i, (s, (r, g, b)) in enumerate(self.vlastnosti + self.vlastnosti[:1]):
             # delka = Poloměr n-úhelníku v tomto bodu, v pixelech
             delka = VELIKOST_ASTEROIDU + s * SISATOST
             # úhel je v radiánech
             uhel = i * math.pi * 2 / POCET_VYSECI_ASTEROIDU
-            r = 0.5 - s / 2
-            g = 0.75 - s / 4
-            gl.glColor3f(r, g, 1)
+            # Nastavit barvu
+            gl.glColor3f(r, g, b)
+            # Přidat bod
             gl.glVertex2f(
                 math.cos(uhel) * delka,
                 math.sin(uhel) * delka)
