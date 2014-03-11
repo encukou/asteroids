@@ -220,6 +220,16 @@ class Asteroid(VesmirnyObjekt):
                 math.sin(uhel) * delka)
         gl.glEnd()
 
+    def rozbij(self):
+        self.velikost *= 0.7
+
+        novy_asteroid = Asteroid()
+        novy_asteroid.x = self.x
+        novy_asteroid.y = self.y
+        novy_asteroid.velikost = self.velikost
+
+        objekty.append(novy_asteroid)
+
 
 class Torpedo(VesmirnyObjekt):
     """Obdélníkovitý objekt vystřelený z rakety"""
@@ -260,9 +270,7 @@ class Torpedo(VesmirnyObjekt):
                     (self.x - objekt.x) ** 2 +
                     (self.y - objekt.y) ** 2)
                 if vzdalenost_na_druhou < objekt.velikost ** 2:
-                    novy_asteroid = Asteroid()
-                    novy_asteroid.velikost = objekt.velikost * 0.7
-                    objekty.append(novy_asteroid)
+                    objekt.rozbij()
                     if self in objekty:
                         objekty.remove(self)
                     break
