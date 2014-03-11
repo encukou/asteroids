@@ -114,6 +114,7 @@ class Raketa(VesmirnyObjekt):
     """
     def nakresli_tvar(self):
         """Nakreslí trojúhelník"""
+        gl.glColor3f(0, 1, 0)
         # Začít kreslit trojúhelník
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         # Zadat souřadnice vrcholu trojúhelníka (X značí vrcholy, + počátek)
@@ -191,6 +192,7 @@ class Asteroid(VesmirnyObjekt):
 
     def nakresli_tvar(self):
         """Nakreslí asteroid jako n-úhelník se středem v (0, 0)"""
+        gl.glColor3f(1, 1, 1)
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         # Bod společný všem vykresleným trojúhelníkům
         gl.glVertex2f(0, 0)
@@ -200,6 +202,9 @@ class Asteroid(VesmirnyObjekt):
             delka = VELIKOST_ASTEROIDU + s * SISATOST
             # úhel je v radiánech
             uhel = i * math.pi * 2 / POCET_VYSECI_ASTEROIDU
+            r = 0.5 - s / 2
+            g = 0.75 - s / 4
+            gl.glColor3f(r, g, 1)
             gl.glVertex2f(
                 math.cos(uhel) * delka,
                 math.sin(uhel) * delka)
@@ -223,6 +228,7 @@ class Torpedo(VesmirnyObjekt):
 
     def nakresli_tvar(self):
         """Nakreslí obdélník"""
+        gl.glColor3f(1, 0.5, 0)
         gl.glBegin(gl.GL_TRIANGLE_FAN)
         gl.glVertex2f(-VELIKOST_TORPEDA, -VELIKOST_TORPEDA/2)
         gl.glVertex2f(-VELIKOST_TORPEDA, VELIKOST_TORPEDA/2)
@@ -251,8 +257,6 @@ def vykresli():
     """Vykresli celou scénu"""
     # Reset okýnka
     gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-    # Nastavení barvy, kterou budeme kreslit
-    gl.glColor3f(1, 1, 1)
     # Reset souřadného systému
     gl.glLoadIdentity()
     # Nakreslení samotných objektů
