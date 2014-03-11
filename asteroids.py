@@ -253,7 +253,7 @@ class Torpedo(VesmirnyObjekt):
         if self.delka_drahy > (window.width + window.height) / 2:
             objekty.remove(self)
         # Střety s asteroidy
-        for objekt in objekty:
+        for objekt in list(objekty):
             if objekt.jsem_asteroid:
                 vzdalenost_na_druhou = (
                     (self.x - objekt.x) ** 2 +
@@ -277,12 +277,12 @@ def vykresli():
     # Reset souřadného systému
     gl.glLoadIdentity()
     # Nakreslení samotných objektů
-    for objekt in objekty:
+    for objekt in list(objekty):
         objekt.nakresli()
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
-    for objekt in objekty:
+    for objekt in list(objekty):
         objekt.pohyb(dt)
 
 def vystrel():
