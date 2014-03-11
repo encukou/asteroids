@@ -198,6 +198,7 @@ class Asteroid(VesmirnyObjekt):
                 (r, g, b),
             ))
         self.jsem_asteroid = True
+        self.velikost = VELIKOST_ASTEROIDU
 
     def nakresli_tvar(self):
         """Nakreslí asteroid jako n-úhelník se středem v (0, 0)"""
@@ -208,7 +209,7 @@ class Asteroid(VesmirnyObjekt):
         # Jednotlivé body na obvodu
         for i, (s, (r, g, b)) in enumerate(self.vlastnosti + self.vlastnosti[:1]):
             # delka = Poloměr n-úhelníku v tomto bodu, v pixelech
-            delka = VELIKOST_ASTEROIDU + s * SISATOST
+            delka = self.velikost + s * SISATOST
             # úhel je v radiánech
             uhel = i * math.pi * 2 / POCET_VYSECI_ASTEROIDU
             # Nastavit barvu
@@ -258,8 +259,10 @@ class Torpedo(VesmirnyObjekt):
                 vzdalenost_na_druhou = (
                     (self.x - objekt.x) ** 2 +
                     (self.y - objekt.y) ** 2)
-                if vzdalenost_na_druhou < VELIKOST_ASTEROIDU ** 2:
-                    objekty.append(Asteroid())
+                if vzdalenost_na_druhou < objekt.velikost ** 2:
+                    novy_asteroid = Asteroid()
+                    novy_asteroid.velikost = objekt.velikost * 0.7
+                    objekty.append(novy_asteroid)
                     if self in objekty:
                         objekty.remove(self)
                     break
