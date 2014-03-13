@@ -28,6 +28,7 @@ UHLOVA_RYCHLOST = 200  # stupnu/s
 UHLOVA_RYCHLOST_ASTEROIDU = 200  # max, stupnu/s
 VELIKOST_LODI = 20  # px
 VELIKOST_ASTEROIDU = 40  # px, pocatecni
+MINIMALNI_VELIKOST_ASTEROIDU = 15  # px
 SISATOST = 5 # px, max. odchylka od VELIKOST_ASTEROIDU
 RYCHLOST_ASTEROIDU = 100  # max, px/s
 POCET_VYSECI_ASTEROIDU = 13
@@ -221,14 +222,17 @@ class Asteroid(VesmirnyObjekt):
         gl.glEnd()
 
     def rozbij(self):
-        self.velikost *= 0.7
+        objekty.remove(self)
+        if self.velikost > MINIMALNI_VELIKOST_ASTEROIDU:
+            self.velikost *= 0.7
 
-        novy_asteroid = Asteroid()
-        novy_asteroid.x = self.x
-        novy_asteroid.y = self.y
-        novy_asteroid.velikost = self.velikost
+            for i in range(2):
+                novy_asteroid = Asteroid()
+                novy_asteroid.x = self.x
+                novy_asteroid.y = self.y
+                novy_asteroid.velikost = self.velikost
 
-        objekty.append(novy_asteroid)
+                objekty.append(novy_asteroid)
 
 
 class Torpedo(VesmirnyObjekt):
