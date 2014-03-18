@@ -35,6 +35,7 @@ POCET_VYSECI_ASTEROIDU = 13
 VELIKOST_TORPEDA = 3  # px
 RYCHLOST_TORPEDA = 500  # px/s
 POCET_ASTEROIDU = 3
+VELIKOST_FONTU = 90
 
 game_over = False
 
@@ -322,6 +323,15 @@ def vykresli():
     # Nakreslení samotných objektů
     for objekt in list(objekty):
         objekt.nakresli()
+    if game_over:
+        napis = pyglet.text.Label(
+            'Game Over',
+            font_name='League Gothic',
+            font_size=VELIKOST_FONTU,
+            x=window.width / 2,
+            y=window.height / 2,
+            anchor_x='center')
+        napis.draw()
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
