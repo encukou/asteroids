@@ -36,6 +36,8 @@ VELIKOST_TORPEDA = 3  # px
 RYCHLOST_TORPEDA = 500  # px/s
 POCET_ASTEROIDU = 3
 
+game_over = False
+
 # Vytvoření okna
 window = pyglet.window.Window(width=800, height=600)
 
@@ -300,8 +302,9 @@ def vykresli():
 
 def update(dt):
     """Aktualizuj stav celé hry po ``dt`` uplynulých sekundách"""
-    for objekt in list(objekty):
-        objekt.pohyb(dt)
+    if not game_over:
+        for objekt in list(objekty):
+            objekt.pohyb(dt)
 
 def vystrel():
     """Přidej nové torpédo na pozici rakety"""
@@ -309,10 +312,13 @@ def vystrel():
 
 def stisk_klavesy(klavesa, mod):
     """Zaznamenej stisk klávesy"""
+    global game_over
     klavesy.add(klavesa)
     # Vždycky když hráč stiskne mezeru, raketa vystřelí
     if klavesa == key.SPACE:
         vystrel()
+    if klavesa == key.Q:
+        game_over = True
 
 def pusteni_klavesy(klavesa, mod):
     """Zaznamenej puštění klávesy"""
