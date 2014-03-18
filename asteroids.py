@@ -130,6 +130,7 @@ class Raketa(VesmirnyObjekt):
 
     def pohyb(self, dt):
         """Aktualizuj stav rakety po ``dt`` uplynulých sekundách"""
+        global game_over
         # Nejdřív uděláme pohyb společný všem vermírným objektům
         VesmirnyObjekt.pohyb(self, dt)
         # Aktualizovat natočení rakety podle šipek
@@ -162,6 +163,19 @@ class Raketa(VesmirnyObjekt):
         if key.DOWN in klavesy:
             self.rychlost_x -= dt * ZRYCHLENI * math.cos(uhel)
             self.rychlost_y -= dt * ZRYCHLENI * math.sin(uhel)
+
+        for objekt in list(objekty):
+            if objekt.jsem_asteroid:
+                uhel = self.rotace * math.pi / 180
+                spicka_x = (self.x +
+                            VELIKOST_LODI * math.cos(uhel))
+                spicka_y = (self.y +
+                            VELIKOST_LODI * math.sin(uhel))
+                vzdalenost_na_druhou = (
+                    (spicka_x - objekt.x) ** 2 +
+                    (spicka_y - objekt.y) ** 2)
+                if objekt.velikost ** 2 > vzdalenost_na_druhou:
+                    game_over = True
 
 
 class Asteroid(VesmirnyObjekt):
