@@ -164,18 +164,27 @@ class Raketa(VesmirnyObjekt):
             self.rychlost_x -= dt * ZRYCHLENI * math.cos(uhel)
             self.rychlost_y -= dt * ZRYCHLENI * math.sin(uhel)
 
+        uhel = self.rotace * math.pi / 180
+        kosin = math.cos(uhel)
+        sinus = math.sin(uhel)
+        v = VELIKOST_LODI
+        spicky = [
+            (self.x + v * kosin,
+             self.y + v * sinus),
+            (self.x - v * kosin - v * sinus / 2,
+             self.y - v * sinus + v * kosin / 2),
+            (self.x - v * kosin + v * sinus / 2,
+             self.y - v * sinus - v * kosin / 2),
+        ]
+
         for objekt in list(objekty):
             if objekt.jsem_asteroid:
-                uhel = self.rotace * math.pi / 180
-                spicka_x = (self.x +
-                            VELIKOST_LODI * math.cos(uhel))
-                spicka_y = (self.y +
-                            VELIKOST_LODI * math.sin(uhel))
-                vzdalenost_na_druhou = (
-                    (spicka_x - objekt.x) ** 2 +
-                    (spicka_y - objekt.y) ** 2)
-                if objekt.velikost ** 2 > vzdalenost_na_druhou:
-                    game_over = True
+                for spicka_x, spicka_y in spicky:
+                    vzdalenost_na_druhou = (
+                        (spicka_x - objekt.x) ** 2 +
+                        (spicka_y - objekt.y) ** 2)
+                    if objekt.velikost ** 2 > vzdalenost_na_druhou:
+                        game_over = True
 
 
 class Asteroid(VesmirnyObjekt):
