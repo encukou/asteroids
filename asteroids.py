@@ -192,7 +192,7 @@ class Asteroid(VesmirnyObjekt):
     """Téměř kulatý vesmírný objekt
     """
     def __init__(self):
-        # Nejdřív inicializujeme 'self' jako vesmýrný objekt
+        # Nejdřív inicializujeme 'self' jako vesmírný objekt
         VesmirnyObjekt.__init__(self)
         # Náhodná rychlost
         self.rychlost_x = random.uniform(-RYCHLOST_ASTEROIDU,
